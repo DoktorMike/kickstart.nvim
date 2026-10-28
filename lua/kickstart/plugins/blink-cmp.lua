@@ -31,6 +31,9 @@ return {
         opts = {},
       },
       'folke/lazydev.nvim',
+      'erooke/blink-cmp-latex',
+      'moyiz/blink-emoji.nvim',
+      -- 'milanglacier/minuet-ai.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -57,7 +60,9 @@ return {
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        -- preset = 'default',
+        -- Manually invoke minuet completion.
+        -- ['<A-y>'] = require('minuet').make_blink_map(),
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -73,12 +78,51 @@ return {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        -- Recommended to avoid unnecessary request (Minuet)
+        -- trigger = { prefetch_on_insert = false },
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'latex', 'emoji', 'snippets', 'lazydev' },
         providers = {
+          -- minuet = {
+          --   name = 'minuet',
+          --   module = 'minuet.blink',
+          --   async = true,
+          --   -- Should match minuet.config.request_timeout * 1000,
+          --   -- since minuet.config.request_timeout is in seconds
+          --   timeout_ms = 3000,
+          --   score_offset = 50, -- Gives minuet higher priority among suggestions
+          -- },
+          emoji = {
+            module = 'blink-emoji',
+            name = 'Emoji',
+            score_offset = 15, -- Tune by preference
+            opts = {
+              insert = true, -- Insert emoji (default) or complete its name
+              ---@type string|table|fun():table
+              trigger = function()
+                return { ':' }
+              end,
+            },
+            should_show_items = function()
+              return vim.tbl_contains(
+                -- Enable emoji completion only for git commits and markdown.
+                -- By default, enabled for all file-types.
+                { 'gitcommit', 'markdown' },
+                vim.o.filetype
+              )
+            end,
+          },
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          latex = {
+            name = 'Latex',
+            module = 'blink-cmp-latex',
+            opts = {
+              -- set to true to insert the latex command instead of the symbol
+              insert_command = false,
+            },
+          },
         },
       },
 

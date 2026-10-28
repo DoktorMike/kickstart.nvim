@@ -31,10 +31,10 @@ return {
       end,
       -- Fix styler
       formatters = {
-        runic = {
-          command = 'julia',
-          args = { '--startup-file=no', '--project=@runic', '-e', 'using Runic; exit(Runic.main(ARGS))' },
-        },
+        -- runic = {
+        --   command = 'julia',
+        --   args = { '--startup-file=no', '--project=@runic', '-e', 'using Runic; exit(Runic.main(ARGS))' },
+        -- },
         styler = {
           -- hijacking "https://github.com/devOpifex/r.nvim",
           args = { '-s', '-e', 'styler::style_file(commandArgs(TRUE),indent_by=4L)', '--args', '$FILENAME' },
@@ -55,7 +55,11 @@ return {
         r = { 'styler' },
         quarto = { 'styler' },
         julia = { 'runic' },
-        html = { 'htmlbeautifier', 'html_beautify' },
+        sql = { 'pgformatter', 'sql-formatter', stop_after_first = true },
+        html = { 'htmlbeautifier', 'html_beautify', stop_after_first = true },
+        sh = { 'beautysh', 'shfmt', stop_after_first = true },
+        json = { 'prettier' },
+        jsonc = { 'prettier' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd', 'prettier', stop_after_first = true },

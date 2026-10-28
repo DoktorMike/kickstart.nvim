@@ -26,10 +26,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -59,10 +59,16 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 -- Figlet stuff
 vim.keymap.set('n', '<leader>if', function()
   vim.api.nvim_command(':r !figlet ' .. vim.fn.input 'Figlet me: ' .. " | sed -e 's/^/\\# /g'")
-end)
+end, { desc = 'Insert Figlet' })
 
 -- Change file as executable
 --vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
+vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Make e[X]ecutable' })
+
+-- Generate password
+-- vim.keymap.set('n', '<leader>p', '<cmd>!openssl rand -base64 33%<CR>')
+vim.keymap.set('n', '<leader>p', function()
+  vim.api.nvim_command ':r !openssl rand -base64 33'
+end, { desc = 'Generate [P]assword' })
 
 -- vim: ts=2 sts=2 sw=2 et

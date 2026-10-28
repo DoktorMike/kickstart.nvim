@@ -32,8 +32,37 @@ return {
     config = function()
       -- Manually enable the julia lsp which uses the @nvim-lspconfig environment
       -- This doesn't start the server but tells nvim to launch it once the file type is correct.
+      -- vim.lsp.enable 'julials'
+      vim.lsp.config('jetls', {
+        cmd = {
+          -- 'jetls',
+          -- 'serve',
+          'julia',
+          '--startup-file=no',
+          '--project=/home/mike/src/progs/JETLS.jl',
+          '-m',
+          'JETLS',
+          'serve',
+        },
+        exit_timeout = 3000,
+        filetypes = { 'julia' },
+        root_markers = { 'Project.toml' },
+      })
+      -- vim.lsp.enable 'jetls'
+      -- LanguageServer.jl main no longer uses SymbolServer/StaticLint, so the
+      -- nvim-lspconfig default cmd breaks. Use the runserver() entry point instead.
+      vim.lsp.config('julials', {
+        cmd = {
+          'julia',
+          '--startup-file=no',
+          '--history-file=no',
+          '--project=' .. vim.fn.expand '~/.julia/environments/nvim-lspconfig',
+          '-e',
+          'using LanguageServer; runserver()',
+        },
+      })
       vim.lsp.enable 'julials'
-
+      -- vim.lsp.enable 'termux_language_server'
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -223,9 +252,24 @@ return {
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
-        --
 
+        -- Julia language server
+        -- jetls = {
+        --   cmd = {
+        --     '/home/mike/.julia/bin/jetls',
+        --     '--threads=auto',
+        --     '--',
+        --   },
+        --   filetypes = { 'julia' },
+        --   root_markers = { 'Project.toml', 'JuliaProject.toml' },
+        --   settings = {},
+        -- },
+        -- julials = {},
+
+        bashls = {},
+        fish_lsp = {},
         r_language_server = {},
+        postgres_lsp = {},
         docker_compose_language_service = {},
         lua_ls = {
           -- cmd = { ... },
