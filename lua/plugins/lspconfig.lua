@@ -4,9 +4,18 @@ vim.pack.add {
   'https://github.com/mason-org/mason.nvim',
   'https://github.com/mason-org/mason-lspconfig.nvim',
   'https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim',
+  'https://github.com/folke/lazydev.nvim',
 }
 
 require('fidget').setup {}
+
+-- Give lua_ls the Neovim API, plus a plugin's types only once it is `require`d.
+-- Loading the whole runtimepath as a library makes lua_ls slow on every edit.
+require('lazydev').setup {
+  library = {
+    { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+  },
+}
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
@@ -59,22 +68,8 @@ local servers = {
   stylua = {},
   ts_ls = {},
   lua_ls = {
-    on_init = function(client)
-      -- Formatting is done by stylua
-      client.server_capabilities.documentFormattingProvider = false
-
-      -- Projects with their own .luarc.json configure lua_ls themselves
-      if client.workspace_folders then
-        local path = client.workspace_folders[1].name
-        if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
-      end
-
-      -- Otherwise assume Neovim Lua
-      client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-        runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
-        workspace = { checkThirdParty = false, library = vim.api.nvim_get_runtime_file('', true) },
-      })
-    end,
+    -- Formatting is done by stylua. Neovim runtime and plugin types come from lazydev.
+    on_init = function(client) client.server_capabilities.documentFormattingProvider = false end,
     settings = {
       Lua = {
         completion = { callSnippet = 'Replace' },
