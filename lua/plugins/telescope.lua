@@ -44,7 +44,7 @@ vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.s
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('telescope-lsp-attach', { clear = true }),
   callback = function(event)
-    local function map(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { buffer = event.buf, desc = desc }) end
+    local function map(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { buffer = event.buf, desc = 'LSP: ' .. desc }) end
     map('grr', builtin.lsp_references, '[G]oto [R]eferences')
     map('gri', builtin.lsp_implementations, '[G]oto [I]mplementation')
     map('grd', builtin.lsp_definitions, '[G]oto [D]efinition')

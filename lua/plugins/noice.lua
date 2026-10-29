@@ -6,7 +6,10 @@ vim.pack.add {
 
 require('noice').setup {
   lsp = {
-    -- Render LSP hover/signature markdown with treesitter
+    -- fidget shows progress and blink shows signature help
+    progress = { enabled = false },
+    signature = { enabled = false },
+    -- Render LSP hover markdown with treesitter
     override = {
       ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
       ['vim.lsp.util.stylize_markdown'] = true,
@@ -23,3 +26,6 @@ require('noice').setup {
     { filter = { event = 'msg_show', kind = '', find = 'written' }, opts = { skip = true } },
   },
 }
+
+require('telescope').load_extension 'noice'
+vim.keymap.set('n', '<leader>sm', '<cmd>Telescope noice<CR>', { desc = '[S]earch [M]essages' })

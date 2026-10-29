@@ -9,7 +9,7 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 vim.keymap.set('n', '<leader>if', function() vim.cmd('r !figlet ' .. vim.fn.input 'Figlet me: ' .. " | sed -e 's/^/\\# /g'") end, { desc = 'Insert [F]iglet' })
 vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Make e[X]ecutable' })
-vim.keymap.set('n', '<leader>p', '<cmd>r !openssl rand -base64 33<CR>', { desc = 'Generate [P]assword' })
+vim.keymap.set('n', '<leader>ip', '<cmd>r !openssl rand -base64 33<CR>', { desc = '[I]nsert [P]assword' })
 
 vim.diagnostic.config {
   severity_sort = true,
@@ -28,7 +28,7 @@ vim.diagnostic.config {
     on_jump = function(_, bufnr) vim.diagnostic.open_float { bufnr = bufnr, scope = 'cursor', focus = false } end,
   },
 }
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostics location list' })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking text',

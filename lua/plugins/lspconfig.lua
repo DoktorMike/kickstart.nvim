@@ -22,8 +22,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local function map(keys, func, desc, mode) vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc }) end
 
-    map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-    map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+    -- grn (rename), gra (code action) and grx (codelens) are Neovim defaults
     map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
